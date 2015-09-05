@@ -9,11 +9,15 @@ import android.view.MenuItem;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteOpenHelper;
 
+// SQL Cipher imports
 import de.greenrobot.dao.database.SQLCipherDatabase;
 import de.greenrobot.daoexample.DaoMaster;
 import de.greenrobot.daoexample.DaoSession;
 import de.greenrobot.daoexample.Note;
 import de.greenrobot.daoexample.NoteDao;
+
+// Unencryted imports
+//import android.database.sqlite.SQLiteDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,8 +26,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // SQL Cipher
         SQLiteDatabase.loadLibs(this);
-        SQLiteOpenHelper helper = new SQLiteOpenHelper(this, "dbname", null, DaoMaster.SCHEMA_VERSION) {
+        SQLiteOpenHelper helper = new SQLiteOpenHelper(this, "greentest.db", null, DaoMaster.SCHEMA_VERSION) {
 
             @Override
             public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -37,10 +42,17 @@ public class MainActivity extends AppCompatActivity {
             }
 
         };
-
         SQLiteDatabase db = helper.getWritableDatabase("password");
         DaoMaster daoMaster = new DaoMaster(new de.greenrobot.dao.database.SQLCipherDatabase(db));
+        // End SQL Cipher
 
+        // Unencrypted
+//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "greentest.db", null);
+//        SQLiteDatabase db = helper.getWritableDatabase();
+//        DaoMaster daoMaster = new DaoMaster(db);
+        // End Unencrypted
+
+        // Shared
         DaoSession daoSession = daoMaster.newSession();
         NoteDao noteDao = daoSession.getNoteDao();
 
